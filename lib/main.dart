@@ -1,200 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_day_28/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants/app_constants.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initSharedPreferences();
+    AppConstants.getTheme().then((_) => setState(() {}));
+    AppConstants.getTextSize().then((_) => setState(() {}));
+    AppConstants.getBackgroundImage().then((_) => setState(() {}));
   }
 
-  void initSharedPreferences() async {
-    sharedPreferences = await SharedPreferences.getInstance();
+  void switchTheme(bool value) async {
+    AppConstants.themeMode = value ? ThemeMode.dark : ThemeMode.light;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDark', value);
+    setState(() {});
   }
 
-  /// Text Controllers--------------------------------------------------------
-  final nameController = TextEditingController();
-
-  final ageController = TextEditingController();
-  final colorsController = TextEditingController();
-
-  /// Variables--------------------------------------------------------
-  String? name;
-  int? age;
-  List<String>? colors = [];
-  late SharedPreferences sharedPreferences;
-
-  /// SharedPrefs Setters--------------------------------------------------------
-  Future<void> saveName() async {
-    await sharedPreferences.setString('name', nameController.text.trim());
-  }
-
-  Future<void> saveAge() async {
-    await sharedPreferences.setInt('age', int.parse(ageController.text.trim()));
-  }
-
-  Future<void> saveColors() async {
-    await sharedPreferences.setStringList(
-        'colors', colorsController.text.split(','));
-  }
-
-  /// SharedPrefs Getters--------------------------------------------------------
-  Future<void> getName() async {
-    setState(() {
-      name = sharedPreferences.getString('name');
-    });
-  }
-
-  Future<void> getAge() async {
-    setState(() {
-      age = sharedPreferences.getInt('age');
-    });
-  }
-
-  Future<void> getColors() async {
-    setState(() {
-      colors = sharedPreferences.getStringList('colors');
-    });
+  void setTextSize(double textSize) async {
+    AppConstants.textSize = textSize;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('textSize', textSize);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Shared Preferences"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /// Age and Name --------------------------------------------------------
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: ageController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Age',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () async {
-                      getName();
-                      getAge();
-                    },
-                    child: const Text('Get'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () {
-                      saveName();
-                      saveAge();
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
-              ],
-            ),
-            Text("Name: ${name ?? ''}"),
-            Text("Age: ${age ?? ''}"),
-
-            /// Colors--------------------------------------------------------
-            const SizedBox(height: 10),
-            TextField(
-              controller: colorsController,
-              decoration: InputDecoration(
-                labelText: 'Favorite colors',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    saveColors();
-                  },
-                  child: const Text("Save Colors"),
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    getColors();
-                  },
-                  child: const Text("Get Colors"),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Colors",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: colors!.length,
-                itemBuilder: (context, index) {
-                  print(colors!);
-                  return ListTile(
-                    leading: const Icon(
-                      Icons.circle,
-                      color: Colors.redAccent,
-                      size: 12,
-                    ),
-                    title: Text(colors![index]),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+    return MaterialApp(
+      themeMode: AppConstants.themeMode,
+      darkTheme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      home: PageView(
+        children: [
+          const HomeScreen(),
+          SettingsScreen(
+            onThemeChanged: switchTheme,
+            onTextSizeChanged: setTextSize,
+          ),
+        ],
       ),
     );
   }
