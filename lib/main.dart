@@ -21,8 +21,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     AppConstants.getTheme().then((_) => setState(() {}));
-    AppConstants.getTextSize().then((_) => setState(() {}));
     AppConstants.getBackgroundImage().then((_) => setState(() {}));
+    AppConstants.getTextSize().then((_) => setState(() {}));
+    AppConstants.getTextColor().then((_) => setState(() {}));
   }
 
   void switchTheme(bool value) async {
@@ -39,6 +40,20 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  void setTextColor(Color color) async {
+    AppConstants.textColor = color;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('textColor', color.value);
+    setState(() {});
+  }
+
+  void setBackground(String imageLink) async {
+    AppConstants.backgroundImage = imageLink;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('backgroundImage', imageLink);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,6 +66,8 @@ class _MyAppState extends State<MyApp> {
           SettingsScreen(
             onThemeChanged: switchTheme,
             onTextSizeChanged: setTextSize,
+            onTextColorChanged: setTextColor,
+            onBackgroundChanged: setBackground,
           ),
         ],
       ),

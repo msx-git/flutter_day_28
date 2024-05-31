@@ -116,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Text(
                         'Get',
-                        style: TextStyle(fontSize: AppConstants.textSize),
+                        style: TextStyle(
+                          fontSize: AppConstants.textSize,
+                          color: AppConstants.textColor,
+                        ),
                       ),
                     ),
                   ),
@@ -129,7 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Text(
                         'Save',
-                        style: TextStyle(fontSize: AppConstants.textSize),
+                        style: TextStyle(
+                          fontSize: AppConstants.textSize,
+                          color: AppConstants.textColor,
+                        ),
                       ),
                     ),
                   ),
@@ -137,11 +143,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Text(
                 "Name: ${name ?? ''}",
-                style: TextStyle(fontSize: AppConstants.textSize),
+                style: TextStyle(
+                    fontSize: AppConstants.textSize,
+                    color: AppConstants.textColor),
               ),
               Text(
                 "Age: ${age ?? ''}",
-                style: TextStyle(fontSize: AppConstants.textSize),
+                style: TextStyle(
+                  fontSize: AppConstants.textSize,
+                  color: AppConstants.textColor,
+                ),
               ),
 
               /// Colors--------------------------------------------------------
@@ -164,7 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Text(
                       "Save Colors",
-                      style: TextStyle(fontSize: AppConstants.textSize),
+                      style: TextStyle(
+                        fontSize: AppConstants.textSize,
+                        color: AppConstants.textColor,
+                      ),
                     ),
                   ),
                   OutlinedButton(
@@ -173,7 +187,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Text(
                       "Get Colors",
-                      style: TextStyle(fontSize: AppConstants.textSize),
+                      style: TextStyle(
+                        fontSize: AppConstants.textSize,
+                        color: AppConstants.textColor,
+                      ),
                     ),
                   ),
                 ],
@@ -186,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: AppConstants.textSize,
+                    color: AppConstants.textColor,
                   ),
                 ),
               ),
@@ -201,7 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       title: Text(
                         colors![index],
-                        style: TextStyle(fontSize: AppConstants.textSize),
+                        style: TextStyle(
+                          fontSize: AppConstants.textSize,
+                          color: AppConstants.textColor,
+                        ),
                       ),
                     );
                   },

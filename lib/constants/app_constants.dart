@@ -4,10 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppConstants {
   static ThemeMode themeMode = ThemeMode.light;
 
-  static String backgroundImage =
-      "https://mfiles.alphacoders.com/101/thumb-1920-1013875.png";
-  static Color backgroundColor = Colors.teal;
-  static double textSize = 14;
+  static String backgroundImage = "";
+  static double textSize = 16;
   static Color textColor = Colors.deepPurple;
 
   static Future<void> getTheme() async {
@@ -18,10 +16,13 @@ class AppConstants {
 
   static Future<void> getTextSize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    textSize = prefs.getDouble('textSize') ?? 14;
+    textSize = prefs.getDouble('textSize') ?? 16;
   }
 
-  //https://i.pinimg.com/originals/a2/92/bb/a292bbb8a8df4680e0c71ce0cde42417.gif
+  static Future<void> getTextColor() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    textColor = Color(prefs.getInt('textColor') ?? 4278190080);
+  }
 
   static Future<void> getBackgroundImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
